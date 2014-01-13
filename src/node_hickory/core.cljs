@@ -1,27 +1,20 @@
 ; This file is a part of node-hickory
-(ns node-hickory.core)
-
-(def ^:dynamic *options*
-  {})
-
-(def ^:private htmlparser
-  (js/require "htmlparser"))
-
-(def ^:private DomHandler
-  (.-DefaultHandler htmlparser))
-
-(def ^:private Parser
-  (.-Parser htmlparser))
+(ns node-hickory.core
+  (:require [cljs.nodejs :as node]))
 
 (defn parse
-  "Returns a channel that will have a value pushed on parsing done
+  "Calls `callback` with an two args
 
-  Pushes an error object on error"
+  If an error occured the first arg will be an error object else nil
+  In the case it succeeded the second arg will be a dom object"
   ([s callback] (parse s {} callback))
   ([s options callback]
-   (let [handler (fn [err dom]
+   (let [htmlparser (node/require "htmlparser")
+         DomHandler (.-DefaultHandler htmlparser)
+         Parser (.-Parser htmlparser)
+         handler (fn [err dom]
                    (callback err dom))
-         dom-handler (DomHandler. handler)
+         dom-handler (DomHandler. handler (clj->js options))
          parser (Parser. dom-handler)]
      (.parseComplete parser s))))
 
