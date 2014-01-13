@@ -1,4 +1,4 @@
-(defproject rhg135/node-hickory "0.0.1-SNAPSHOT"
+(defproject rhg135/node-hickory "0.0.1"
   :description "An HTML parser for nodejs"
   :url "http://github.com/node-hickory"
   :license {:name "Eclipse Public MIT"
